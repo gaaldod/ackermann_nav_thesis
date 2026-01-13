@@ -1,6 +1,13 @@
 # Ackermann Navigation Thesis
 
-ROS 2 navigation system for Ackermann steering robot - Thesis project by Gaál Dominik.
+ROS 2 navigation system for Ackermann steering robot - Thesis testing/studying project by Gaál Dominik.
+
+## Demo
+
+<!-- Add your demo GIF/video here -->
+![Demo](img/demo.gif)
+
+*Demo showing the navigation node processing mock LiDAR data and publishing control commands*
 
 ## Overview
 
