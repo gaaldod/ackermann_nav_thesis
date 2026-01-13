@@ -7,11 +7,24 @@ ROS 2 navigation system for Ackermann steering robot - Thesis testing/studying p
 <!-- Add your demo GIF/video here -->
 ![Demo](img/demo.gif)
 
-*Demo showing the navigation node processing mock LiDAR data and publishing control commands*
+*Demo showing the navigation node processing mock LiDAR data*
 
 ## Overview
 
-This repository contains the implementation of an autonomous path planning and navigation system for a Wheeltec Ackermann-steering robot using ROS 2 Humble. The project focuses on developing a complete navigation stack including environment sensing, state estimation, motion planning, and motion control.
+This repository contains a test program and foundation for developing an autonomous navigation system for a Wheeltec Ackermann-steering robot using ROS 2 Humble. 
+
+**Current Implementation (First Semester):**
+- Basic sensor integration (LiDAR data subscription)
+- Simple local occupancy grid ("board model")
+- Basic obstacle avoidance algorithm
+- Control command publishing (Twist messages)
+- Mock LiDAR publisher for testing without simulator
+
+**Future Goals:**
+- Advanced path planning algorithms (Hybrid A*, TEB, etc.)
+- Full state estimation and odometry integration
+- Complete Ackermann-compatible motion control
+- Integration with Gazebo simulator and real robot
 
 ## Repository Structure
 
@@ -189,12 +202,18 @@ ros2 launch ackermann_thesis test_nav.launch.py
 
 ## Architecture
 
-The system is designed with the following components:
+The current test program implements a simplified architecture with the following components:
 
-1. **SensorNode**: Handles sensor data (LiDAR, odometry)
-2. **ObstacleDetector**: Processes sensor data to detect obstacles
-3. **LocalPlanner**: Implements local path planning with obstacle avoidance
-4. **AckermannController**: Converts planned paths to Ackermann-compatible control commands
+1. **Sensor Integration**: Subscribes to LiDAR data (`/scan` topic)
+2. **Board Model**: Maintains a local 2D occupancy grid for obstacle representation
+3. **Obstacle Detection**: Simple forward-path checking algorithm
+4. **Basic Control**: Publishes velocity commands (`/cmd_vel`) based on obstacle detection
+
+**Planned Architecture (Future Development):**
+- Full sensor fusion (LiDAR, odometry, IMU)
+- Advanced path planning (Hybrid A*, TEB, etc.)
+- Complete Ackermann kinematics controller
+- Dynamic obstacle handling
 
 ## Development Status
 
