@@ -20,50 +20,98 @@ ackermann_nav_thesis/
 
 ## Dependencies
 
-### Required ROS 2 Packages
-- ROS 2 Humble Hawksbill
-- `sensor_msgs`
-- `geometry_msgs`
-- `std_msgs`
-- `visualization_msgs`
-- `tf2_ros`
-- `tf2_geometry_msgs`
+### System Requirements
+- Ubuntu 22.04 (Jammy Jellyfish) or compatible Linux distribution
+- ROS 2 Humble Hawksbill installed and sourced
 
-### External Dependencies
-- **Simulator**: [`robotverseny_gazebo24`](https://github.com/robotverseny/robotverseny_gazebo24) - Gazebo simulation environment (optional, for full simulation)
+### Required ROS 2 Packages
+
+These packages are typically included with ROS 2 Humble, but ensure they are installed:
+
+```bash
+sudo apt install \
+    ros-humble-sensor-msgs \
+    ros-humble-geometry-msgs \
+    ros-humble-std-msgs \
+    ros-humble-visualization-msgs \
+    ros-humble-tf2-ros \
+    ros-humble-tf2-geometry-msgs \
+    ros-humble-rviz2
+```
+
+### Python Dependencies
+
+```bash
+sudo apt install python3-numpy
+# Or via pip:
+# pip3 install numpy
+```
+
+### Optional Dependencies (for Simulator)
+
+For using the minimal simulator launch file:
+```bash
+sudo apt install ros-humble-ros-gz-sim ros-humble-ros-gz-bridge
+```
+
+### External Repositories (Optional)
+
 - **Robot Model**: [`megoldas_sim24`](https://github.com/robotverseny/megoldas_sim24) - Wheeltec Ackermann robot model (used as reference, not modified)
+- **Simulator**: [`robotverseny_gazebo24`](https://github.com/robotverseny/robotverseny_gazebo24) - Gazebo simulation environment (optional, for full simulation)
 
 ## Setup Instructions
 
-### 1. Clone Dependencies
+### 1. Install Required Packages
+
+First, install all required ROS 2 packages and dependencies:
+
+```bash
+# Install ROS 2 packages
+sudo apt update
+sudo apt install \
+    ros-humble-sensor-msgs \
+    ros-humble-geometry-msgs \
+    ros-humble-std-msgs \
+    ros-humble-visualization-msgs \
+    ros-humble-tf2-ros \
+    ros-humble-tf2-geometry-msgs \
+    ros-humble-rviz2 \
+    python3-numpy
+
+# Optional: For simulator support
+sudo apt install ros-humble-ros-gz-sim ros-humble-ros-gz-bridge
+```
+
+### 2. Clone Dependencies
 
 ```bash
 cd ~/ros2_ws/src
-git clone https://github.com/robotverseny/megoldas_sim24.git
-```
 
-**Optional - For Full Simulator:**
-```bash
-# Clone the simulator repository
+# Clone robot model (required for simulator, optional for mock testing)
+git clone https://github.com/robotverseny/megoldas_sim24.git
+
+# Optional - For Full Simulator:
 git clone https://github.com/robotverseny/robotverseny_gazebo24.git
 ```
 
-### 2. Build the Workspace
+### 3. Build the Workspace
 
 ```bash
 cd ~/ros2_ws
+
+# Source ROS 2 (if not already in your .bashrc)
+source /opt/ros/humble/setup.bash
+
+# Build the workspace
 colcon build --symlink-install
+
+# Source the workspace
 source install/setup.bash
 ```
 
-### 3. Install Required Packages
+**Note:** Add `source ~/ros2_ws/install/setup.bash` to your `~/.bashrc` for convenience.
 
-For the minimal simulator, you need:
-```bash
-sudo apt install ros-humble-ros-gz-sim
-```
-
-### 4. Run the Simulator
+### 4. Run the Simulator (Optional)
 
 **Option A: Use the minimal simulator (Recommended)**
 ```bash
@@ -145,11 +193,15 @@ The system is designed with the following components:
 
 - [x] Repository setup
 - [x] ROS 2 package structure
-- [ ] Sensor integration
-- [ ] Board model (local occupancy grid)
-- [ ] Base navigation algorithm
-- [ ] Ackermann controller
-- [ ] Testing and validation
+- [x] Sensor integration (LiDAR subscription)
+- [x] Board model (local occupancy grid)
+- [x] Base navigation algorithm (simple obstacle avoidance)
+- [x] Ackermann controller (Twist command publishing)
+- [x] Mock LiDAR publisher for testing
+- [x] Basic testing and validation
+- [ ] Advanced path planning algorithms (Hybrid A*, etc.)
+- [ ] Full simulator integration
+- [ ] Real robot testing
 
 ## License
 
