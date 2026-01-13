@@ -200,6 +200,39 @@ source ~/ros2_ws/install/setup.bash
 ros2 launch ackermann_thesis test_nav.launch.py
 ```
 
+**Option D: Manual Control**
+
+For manual control of the robot:
+
+```bash
+# Terminal 1: Start manual control node
+source ~/ros2_ws/install/setup.bash
+ros2 run ackermann_thesis manual_control_node
+
+# Terminal 2: Send control commands
+source ~/ros2_ws/install/setup.bash
+
+# Forward
+ros2 topic pub /manual_control std_msgs/msg/String "data: 'forward'"
+
+# Backward
+ros2 topic pub /manual_control std_msgs/msg/String "data: 'backward'"
+
+# Turn left
+ros2 topic pub /manual_control std_msgs/msg/String "data: 'left'"
+
+# Turn right
+ros2 topic pub /manual_control std_msgs/msg/String "data: 'right'"
+
+# Stop
+ros2 topic pub /manual_control std_msgs/msg/String "data: 'stop'"
+
+# Set custom speed (linear,angular)
+ros2 topic pub /manual_control std_msgs/msg/String "data: 'speed:0.3,0.2'"
+```
+
+The manual control node publishes Twist commands to `/cmd_vel` based on string commands received on `/manual_control` topic.
+
 ## Architecture
 
 The current test program implements a simplified architecture with the following components:
@@ -224,6 +257,7 @@ The current test program implements a simplified architecture with the following
 - [x] Base navigation algorithm (simple obstacle avoidance)
 - [x] Ackermann controller (Twist command publishing)
 - [x] Mock LiDAR publisher for testing
+- [x] Manual control node
 - [x] Basic testing and validation
 - [ ] Advanced path planning algorithms (Hybrid A*, etc.)
 - [ ] Full simulator integration
