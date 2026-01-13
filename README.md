@@ -56,29 +56,80 @@ colcon build --symlink-install
 source install/setup.bash
 ```
 
-### 3. Run the Simulator
+### 3. Install Required Packages
 
-Start the simulator using the method provided by `robotverseny_gazebo24`. 
-The exact command depends on how the simulator package is structured in your setup.
+For the minimal simulator, you need:
+```bash
+sudo apt install ros-humble-ros-gz-sim
+```
+
+### 4. Run the Simulator
+
+**Option A: Use the minimal simulator (Recommended)**
+```bash
+# Build robotverseny_description first (if not already built)
+cd ~/ros2_ws
+colcon build --packages-select robotverseny_description --symlink-install
+source install/setup.bash
+
+# Start the minimal simulator
+ros2 launch ackermann_thesis minimal_sim.launch.py rviz:=true
+
+# If you get OGRE rendering errors (common in WSL), you can try:
+# - Make sure you have X11 forwarding set up
+# - Or use a different display method
+# - The bridge should still work even if Gazebo GUI fails
+```
+
+**Option B: Use the full robotverseny_gazebo24 simulator**
+```bash
+# If you have robotverseny_gazebo24 fully built
+ros2 launch robotverseny_bringup roboworks.launch.py rviz:=true
+```
 
 **Note:** The test navigation node requires:
 - `/scan` topic (LaserScan messages)
 - TF transforms between `odom_combined`, `base_link`, and `laser` frames
 - The simulator should be running before starting the navigation node
 
-### 4. Run Navigation Nodes
+### 5. Run Navigation Nodes
 
-**Using launch file:**
+**Option A: With Mock LiDAR (Recommended for Testing in WSL)**
+
+If Gazebo has rendering issues, use the mock LiDAR publisher:
+
 ```bash
-# After simulator is running (or in another terminal)
+# Terminal 1: Start mock LiDAR publisher
 source ~/ros2_ws/install/setup.bash
-ros2 launch ackermann_thesis test_nav.launch.py
-```
+ros2 run ackermann_thesis mock_lidar_publisher
 
-**Or run directly:**
-```bash
+# Terminal 2: Run your navigation node
 source ~/ros2_ws/install/setup.bash
 ros2 run ackermann_thesis test_nav_node
+```
+
+The mock publisher creates:
+- `/scan` topic with fake obstacle data
+- TF transforms (`odom_combined` -> `base_link` -> `laser`)
+
+**Option B: With Simulator**
+
+```bash
+# Terminal 1: Start simulator
+source ~/ros2_ws/install/setup.bash
+ros2 launch ackermann_thesis minimal_sim.launch.py rviz:=true
+
+# Terminal 2: Run navigation node
+source ~/ros2_ws/install/setup.bash
+ros2 run ackermann_thesis test_nav_node
+```
+
+**Option C: Using Launch File**
+
+```bash
+# After simulator/mock publisher is running
+source ~/ros2_ws/install/setup.bash
+ros2 launch ackermann_thesis test_nav.launch.py
 ```
 
 ## Architecture

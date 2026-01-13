@@ -110,6 +110,12 @@ class TestNavNode(Node):
         """Process incoming LiDAR scan and update board model."""
         self.latest_scan = msg
         self.update_board_model(msg)
+        # Debug: log occasionally
+        if not hasattr(self, '_scan_count'):
+            self._scan_count = 0
+        self._scan_count += 1
+        if self._scan_count % 50 == 0:
+            self.get_logger().info(f'Received scan #{self._scan_count}, ranges: {len(msg.ranges)}')
     
     def update_board_model(self, scan: LaserScan):
         """
@@ -285,7 +291,14 @@ class TestNavNode(Node):
     def control_loop(self):
         """Main control loop - runs periodically."""
         if self.latest_scan is None:
+            if not hasattr(self, '_warned_no_scan'):
+                self.get_logger().warn('Waiting for scan data...')
+                self._warned_no_scan = True
             return
+        
+        # Reset warning flag once we have data
+        if hasattr(self, '_warned_no_scan'):
+            self._warned_no_scan = False
         
         # Get robot pose (for future use)
         self.robot_pose = self.get_robot_pose()
@@ -354,7 +367,7 @@ class TestNavNode(Node):
                     color.r = 1.0
                     color.g = 0.0
                     color.b = 0.0
-                    color.a = occupancy
+                    color.a = float(occupancy)  # Ensure it's a Python float, not numpy float
                     marker.colors.append(color)
         
         marker_array.markers.append(marker)

@@ -13,6 +13,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'), glob('launch/*launch.[pxy][yma]*')),
+        (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
     ],
     install_requires=['setuptools', 'numpy'],
     zip_safe=True,
@@ -28,6 +29,7 @@ setup(
     entry_points={
         'console_scripts': [
             'test_nav_node = ackermann_thesis.test_nav_node:main',
+            'mock_lidar_publisher = ackermann_thesis.mock_lidar_publisher:main',
         ],
     },
 )
